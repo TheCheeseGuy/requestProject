@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/TheCheeseGuy/requestProject/issues"
   },
-  "homepage": "https://github.com/TheCheeseGuy/requestProject#readme"
+  "homepage": "https://github.com/TheCheeseGuy/requestProject#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
 }

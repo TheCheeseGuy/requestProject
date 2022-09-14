@@ -1,0 +1,119 @@
+<html lang="en">
+
+<%- include ('./partials/header.ejs') %>
+
+    <% const params={ "profile_id" : credential.PROFILE_ID, "access_key" : credential.ACCESS_KEY, "transaction_uuid"
+        :data.refNo, "signed_date_time" :`${(new Date().toISOString()).substring(0,19)}Z` , "signed_field_names"
+        : "profile_id,access_key,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,payment_method,transaction_type,reference_number,auth_trans_ref_no,amount,currency,merchant_descriptor,override_custom_receipt_page"
+        , "unsigned_field_names"
+        : "device_fingerprint_id,card_type,card_number,card_expiry_date,card_cvn,bill_to_forename,bill_to_surname,bill_to_email,bill_to_phone,bill_to_address_line1,bill_to_address_line2,bill_to_address_city,bill_to_address_state,bill_to_address_country,bill_to_address_postal_code,customer_ip_address,line_item_count,item_0_code,item_0_sku,item_0_name,item_0_quantity,item_0_unit_price,item_1_code,item_1_sku,item_1_name,item_1_quantity,item_1_unit_price,merchant_defined_data1,merchant_defined_data2,merchant_defined_data3,merchant_defined_data4"
+        , "payment_method" : "card" , "transaction_type" : "sale" , "reference_number"
+        :data.merchantRef, "auth_trans_ref_no" : data.merchantRef,"amount": data.amount , "currency" : "GHS" , "locale"
+        : "en-us" , "merchant_descriptor" : "Krungsri" , "override_custom_receipt_page"
+        : "http://localhost:4000/api/test" } %>
+        <% const signature=transactionService.sign(params) %>
+            <% const sessionID=crypto.randomBytes(16).toString('base64') %>
+            <% const df_params = `org_id=${credential.DF_ORG_ID}&session_id=${credential.MERCHANT_ID + sessionID}`%>
+
+                <body>
+                    <form id="payment_confirmation" action="https://testsecureacceptance.cybersource.com/silent/pay"
+                        method="post">
+                        <p><%= df_params %></p>
+                        <input type="hidden" id="profile_id" name="profile_id" value="<%= params.profile_id%>">
+                        <input type="hidden" id="access_key" name="access_key" value="<%= params.access_key%>">
+                        <input type="hidden" id="transaction_uuid" name="transaction_uuid"
+                            value="<%= params.transaction_uuid%>">
+                        <input type="hidden" id="signed_date_time" name="signed_date_time"
+                            value="<%= params.signed_date_time%>">
+                        <input type="hidden" id="signed_field_names" name="signed_field_names"
+                            value="profile_id,access_key,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,payment_method,transaction_type,reference_number,auth_trans_ref_no,amount,currency,merchant_descriptor,override_custom_receipt_page">
+                        <input type="hidden" id="unsigned_field_names" name="unsigned_field_names"
+                            value="device_fingerprint_id,card_type,card_number,card_expiry_date,card_cvn,bill_to_forename,bill_to_surname,bill_to_email,bill_to_phone,bill_to_address_line1,bill_to_address_line2,bill_to_address_city,bill_to_address_state,bill_to_address_country,bill_to_address_postal_code,customer_ip_address,line_item_count,item_0_code,item_0_sku,item_0_name,item_0_quantity,item_0_unit_price,item_1_code,item_1_sku,item_1_name,item_1_quantity,item_1_unit_price,merchant_defined_data1,merchant_defined_data2,merchant_defined_data3,merchant_defined_data4">
+                        <input type="hidden" id="payment_method" name="payment_method" value="card">
+                        <input type="hidden" id="transaction_type" name="transaction_type" value="sale">
+                        <input type="hidden" id="reference_number" name="reference_number"
+                            value="<%= params.reference_number%>">
+                        <input type="hidden" id="auth_trans_ref_no" name="auth_trans_ref_no"
+                            value="<%= params.reference_number%>">
+                        <input type="hidden" id="amount" name="amount" value="<%= params.amount%>">
+                        <input type="hidden" id="currency" name="currency" value="GHS">
+                        <input type="hidden" id="locale" name="locale" value="en-us">
+                        <input type="hidden" id="merchant_descriptor" name="merchant_descriptor" value="Krungsri">
+                        <input type="hidden" id="bill_to_forename" name="bill_to_forename" value="Noreal">
+                        <input type="hidden" id="bill_to_surname" name="bill_to_surname" value="Name">
+                        <input type="hidden" id="bill_to_email" name="bill_to_email" value="null@cybersource.com">
+                        <input type="hidden" id="bill_to_phone" name="bill_to_phone" value="+662-2962-000">
+                        <input type="hidden" id="bill_to_address_line1" name="bill_to_address_line1"
+                            value="1295 Charleston Rd">
+                        <input type="hidden" id="bill_to_address_line2" name="bill_to_address_line2"
+                            value="1295 Charleston Rd">
+                        <input type="hidden" id="bill_to_address_city" name="bill_to_address_city"
+                            value="Mountain View">
+                        <input type="hidden" id="bill_to_address_state" name="bill_to_address_state" value="CA">
+                        <input type="hidden" id="bill_to_address_country" name="bill_to_address_country" value="US">
+                        <input type="hidden" id="bill_to_address_postal_code" name="bill_to_address_postal_code"
+                            value="94043">
+                        <input type="hidden" id="override_custom_receipt_page" name="override_custom_receipt_page"
+                            value="<%= params.override_custom_receipt_page%>">
+                        <input type="hidden" id="device_fingerprint_id" name="device_fingerprint_id"
+                            value="<%= sessionID %>">
+                        <input type="hidden" id="customer_ip_address" name="customer_ip_address" value="::1">
+                        <input type="hidden" id="line_item_count" name="line_item_count" value="2">
+                        <input type="hidden" id="item_0_sku" name="item_0_sku" value="sku001">
+                        <input type="hidden" id="item_0_code" name="item_0_code" value="KFLTFDIV">
+                        <input type="hidden" id="item_0_name" name="item_0_name" value="KFLTFDIV">
+                        <input type="hidden" id="item_0_quantity" name="item_0_quantity" value="100">
+                        <input type="hidden" id="item_0_unit_price" name="item_0_unit_price" value="5.72">
+                        <input type="hidden" id="item_1_sku" name="item_1_sku" value="sku002">
+                        <input type="hidden" id="item_1_code" name="item_1_code" value="KFLTFD70">
+                        <input type="hidden" id="item_1_name" name="item_1_name" value="KFLTFD70">
+                        <input type="hidden" id="item_1_quantity" name="item_1_quantity" value="100">
+                        <input type="hidden" id="item_1_unit_price" name="item_1_unit_price" value="10.00">
+                        <input type="hidden" id="merchant_defined_data1" name="merchant_defined_data1" value="MDD#1">
+                        <input type="hidden" id="merchant_defined_data2" name="merchant_defined_data2" value="MDD#2">
+                        <input type="hidden" id="merchant_defined_data3" name="merchant_defined_data3" value="MDD#3">
+                        <input type="hidden" id="merchant_defined_data4" name="merchant_defined_data4" value="MDD#4">
+                        <input type="hidden" name="signature" value="<%= signature%>">
+                        <input type="hidden" name="card-type" value="001">
+                        <div class="container-fluid align-items-center justify-content-center text-center"
+                            style="padding: 60px 0;">
+                            <p class="display-5"> Pay <%= data.merchantName%>
+                            </p>
+                            <p class="lead text-center">
+                                <b>GHS</b>
+                                <%= params.amount%>
+                            </p>
+
+                            <div class="container-fluid" style="width: 600px;">
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="card_number" class="form-control" id="floatingInput"
+                                        placeholder="Card Number" maxlength="16">
+                                    <label for="floatingInput">Enter Card Number</label>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" name="card_expiry_date" class="form-control"
+                                                id="floatingInput" placeholder="Expiry Date">
+                                            <label for="floatingInput">Enter Expiry Date</label>
+                                        </div>
+                                        <div class="form-group col">
+                                            <div class="form-floating mb-3">
+                                                <input type="text" name="card_cvn" class="form-control"
+                                                    id="floatingInput" placeholder="CVV" maxlength="4">
+                                                <label for="floatingInput">CVV</label>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-secondary-outline">Back</button>
+                                        <button type="submit" class="btn btn-success">Pay</button>
+                                    </div>
+                                </div>
+                            </div>
+                    </form>
+                    <script
+                    src="https://h.online-metrix.net/fp/check.js?org_id=<%= credential.DF_ORG_ID%>&amp;session_id=<%= credential.MERCHANT_ID%><%= sessionID%>"
+                    type="text/javascript"></script>
+                </body>
+                <%- include('./partials/footer.ejs') %>
+
+</html>
