@@ -14,20 +14,20 @@ function App() {
       setupTime: "",
       takedownTime: "",
     },
-    foodBeverage: false,
+    foodBeverage: "",
     facilityDetails: [],
-    facilityDept: {
-      lectern: 0,
+     facilityDept: {
+       lectern: 0,
       chairs: 0,
       tables: 0,
       utensils: 0,
+      coffee: 0,
       coffeeUrns: 0,
-      coffeeUrn: 0,
       bottledCups: 0,
       paperPlate: 0,
       tea: 0,
       paperCups: 0,
-      tableCloths: 0,
+      tableCloth: 0,
       piano: 0,
       banners: 0,
       lighting: 0,
@@ -42,7 +42,7 @@ function App() {
       projector: 0,
       microphone: 0,
       extension: 0
-    }
+     }
   }
 
   const validateSchema = Yup.object().shape({
@@ -56,40 +56,41 @@ function App() {
       setupTime: Yup.string().required("Please choose a setup time"),
       takedownTime: Yup.string().required("Please choose a takedown time")
     }),
-    foodBeverage: Yup.boolean().required().oneOf([0 , 1], 'Selecting this field is required'),
+    foodBeverage: Yup.string().required('Please choose'),
     facilityDetails: Yup.array().of(Yup.string()).required('Please choose a facility'),
     facilityDept: Yup.object().shape({
       lectern: Yup.number(),
-      chairs: Yup.number(),
-      tables: Yup.number(),
-      utensils: Yup.number(),
-      coffeeUrn: Yup.number(),
-      bottledCups: Yup.number(),
-      paperPlate: Yup.number(),
-      tea: Yup.number(),
-      paperCups: Yup.number(),
-      tableCloths: Yup.number(),
-      piano: Yup.number(),
-      banners: Yup.number(),
-      lighting: Yup.number(),
-      hotWater: Yup.number()
-    }),
-    itDept: Yup.object().shape({
-      speakers: Yup.number(),
-      soundSystem: Yup.number(),
-      drone: Yup.number(),
-      screen: Yup.number(),
-      camera: Yup.number(),
-      projector: Yup.number(),
-      microphone: Yup.number(),
-      extension: Yup.number(),
+        chairs: Yup.number(),
+        tables: Yup.number(),
+        utensils: Yup.number(),
+        coffeeUrns: Yup.number(),
+        bottledCups: Yup.number(),
+        paperPlate: Yup.number(),
+        tea: Yup.number(),
+        paperCups: Yup.number(),
+        tableCloth: Yup.number(),
+        piano: Yup.number(),
+        banners: Yup.number(),
+        lighting: Yup.number(),
+        hotWater: Yup.number(),
+        coffee:Yup.number()
+      }),
+      itDept: Yup.object().shape({
+        speakers: Yup.number(),
+        soundSystem: Yup.number(),
+        drone: Yup.number(),
+        screen: Yup.number(),
+        camera: Yup.number(),
+        projector: Yup.number(),
+        microphone: Yup.number(),
+        extension: Yup.number(),
     })
 
   })
   //console.log(initialValues)
   function onSubmit(fields, { setStatus, setSubmitting }) {
     setStatus()
-    console.log("fields")
+    console.log(fields)
   }
   //console.log(fields)
   return (
@@ -154,36 +155,36 @@ function App() {
                           <div className="form-floating mt-2">
                             <Field name="eventTiming.endsAt" type="time" className={"form-control" + (getIn(errors, 'eventTiming.endsAt') && getIn(touched, 'eventTiming.endsAt') ? ' is-invalid' : "")} id="floatingInoutGrid" placeholder="Event time" />
                             <label htmlFor="floadtingInputGrid"> Ends at</label>
-                            <ErrorMessage name ="eventTiming.endsAt" component='div' className="invalid-feeback" />
+                            <ErrorMessage name="eventTiming.endsAt" component='div' className="invalid-feeback" />
                           </div>
                         </div>
                       </div>
                       <div className='row'>
                         <div className='col-md'>
                           <div className="form-floating mt-2">
-                            <Field name ="eventTiming.setupTime" type="time" className={"form-control" + (getIn(errors, 'eventTiming.setupTime') && getIn(touched, 'eventTiming.setupTime') ? ' is-invalid' : "")}  id="floatingInoutGrid" placeholder="Event time" />
+                            <Field name="eventTiming.setupTime" type="time" className={"form-control" + (getIn(errors, 'eventTiming.setupTime') && getIn(touched, 'eventTiming.setupTime') ? ' is-invalid' : "")} id="floatingInoutGrid" placeholder="Event time" />
                             <label htmlFor="floadtingInputGrid"> SetUp Time</label>
-                            <ErrorMessage name='eventTIming.setupTime' component ='div' className='invalid-feedback' />
+                            <ErrorMessage name='eventTIming.setupTime' component='div' className='invalid-feedback' />
                           </div>
                         </div>
                         <div className='col-md'>
                           <div className="form-floating mt-2">
-                            <Field name='eventTiming.takeDownTime' type="time" className={"form-control" + (getIn(errors, 'eventTiming.takeDownTime') && getIn(touched, 'eventTiming.takeDownTime') ? ' is-invalid' : "")}  id="floatingInoutGrid" placeholder="Event time" />
+                            <Field name='eventTiming.takedownTime' type="time" className={"form-control" + (getIn(errors, 'eventTiming.takedownTime') && getIn(touched, 'eventTiming.takedownTime') ? ' is-invalid' : "")} id="floatingInoutGrid" placeholder="Event time" />
                             <label htmlFor="floadtingInputGrid"> Take Down Time</label>
-                            <ErrorMessage name ='eventTiming.takeDownTime' component="div" className='invalid-feedback' />
+                            <ErrorMessage name='eventTiming.takedownTime' component="div" className='invalid-feedback' />
                           </div>
                         </div>
                       </div>
                       <div className='mt-2'>
                         <span>Will food / beverages be served ?</span>
                         <div className="form-check">
-                          <Field className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                          <Field className="form-check-input" type="radio" name="foodBeverage" value="yes" id="flexRadioDefault1" />
                           <label className="form-check-label" htmlFor="flexRadioDefault1">
                             Yes
                           </label>
                         </div>
                         <div className="form-check">
-                          <Field className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                          <Field className="form-check-input" type="radio" name="foodBeverage" value="no" id="flexRadioDefault2" />
                           <label className="form-check-label" htmlFor="flexRadioDefault2">
                             No
                           </label>
@@ -204,25 +205,25 @@ function App() {
                         <div className="container-lg justify-itmes-center">
                           <div className="row">
                             <div className="form-check col-md">
-                              <input name="multiPurs" className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" value="Multi Purpose Hall" className="form-check-input" type="checkbox" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Multi Purpose Hall
                               </label>
                             </div>
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="Lincoln Field" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Lincoln Field
                               </label>
                             </div>
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="Swimming Pool" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Swimming Pool
                               </label>
                             </div>
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="Anglican Church Field" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Anglican Church Field
                               </label>
@@ -230,25 +231,25 @@ function App() {
                           </div>
                           <div className="row">
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="Outdoor BasketBall Court" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Outdoor BasketBall Court
                               </label>
                             </div>
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="VPAC" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 VPAC
                               </label>
                             </div>
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="NPAT" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 NPAT
                               </label>
                             </div>
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="Computer Hall" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Computer Hall
                               </label>
@@ -256,25 +257,25 @@ function App() {
                           </div>
                           < div className="row">
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="science lab" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Science Lab <sup>*</sup>
                               </label>
                             </div>
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="Conference room" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Conference Room <sup>*</sup>
                               </label>
                             </div>
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="Classroom" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Classroom <sup>*</sup>
                               </label>
                             </div>
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="Junior School Library" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Junior School Library
                               </label>
@@ -282,19 +283,19 @@ function App() {
                           </div>
                           <div className="row">
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="World Language Center" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 World Language Center
                               </label>
                             </div>
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="Senior School Library" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Senior School Library
                               </label>
                             </div>
                             <div className="form-check col-md">
-                              <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="Under the Arches" id="flexCheckDefault" />
                               <label className="form-check-label" htmlFor="flexCheckDefault">
                                 Under the Arches
                               </label>
@@ -320,19 +321,19 @@ function App() {
                         <div className='container-lg mb-3 row'>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name="facilityDept.lectern" type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Lectern</span>
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name="facilityDept.chairs" type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Chairs</span>
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.tables' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Tables</span>
                             </div>
                           </div>
@@ -340,19 +341,19 @@ function App() {
                         <div className='container-lg  mb-3 row'>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.utensils' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Utensils</span>
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.coffeeUrns' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Coffee Urns</span>
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.coffee' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Coffee</span>
                             </div>
                           </div>
@@ -360,19 +361,19 @@ function App() {
                         <div className='container-lg mb-3 row'>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.bottledCups' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Bottled Cups</span>
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.paperPlate' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Paper Plate</span>
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.tea' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Tea</span>
                             </div>
                           </div>
@@ -380,19 +381,19 @@ function App() {
                         <div className='container-lg mb-3 row'>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.paperCups' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Paper Cups</span>
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.tableCloth' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Table Cloth</span>
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.piano' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Piano</span>
                             </div>
                           </div>
@@ -400,19 +401,19 @@ function App() {
                         <div className='container-lg mb-3 row'>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.banners' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Banners</span>
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.lighting' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Lighting</span>
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                              <Field name='facilityDept.hotWater' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Hot Water</span>
                             </div>
                           </div>
@@ -434,19 +435,19 @@ function App() {
                           <div className='container-lg mb-3 row'>
                             <div className='col-md'>
                               <div className="input-group">
-                                <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                                <Field name='itDept.speakers' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Speakers</span>
                               </div>
                             </div>
                             <div className='col-md'>
                               <div className="input-group">
-                                <input type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                                <Field name='itDept.soundSystem' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Sound System</span>
                               </div>
                             </div>
                             <div className='col-md'>
                               <div className="input-group">
-                                <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                                <Field name='itDept.drone' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Drone</span>
                               </div>
                             </div>
@@ -454,19 +455,19 @@ function App() {
                           <div className='container-lg  mb-3 row'>
                             <div className='col-md'>
                               <div className="input-group">
-                                <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                                <Field name='itDept.screen' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Screen</span>
                               </div>
                             </div>
                             <div className='col-md'>
                               <div className="input-group">
-                                <input type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                                <Field name='itDept.camera' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Camera</span>
                               </div>
                             </div>
                             <div className='col-md'>
                               <div className="input-group">
-                                <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                                <Field name='itDept.projector' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Projector</span>
                               </div>
                             </div>
@@ -474,13 +475,13 @@ function App() {
                           <div className='container-lg mb-3 row'>
                             <div className='col-md'>
                               <div className="input-group">
-                                <input type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                                <Field name='itDept.microphone' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Microphone</span>
                               </div>
                             </div>
                             <div className='col-md'>
                               <div className="input-group">
-                                <input type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+                                <Field name='itDept.extension' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Extension</span>
                               </div>
                             </div>
