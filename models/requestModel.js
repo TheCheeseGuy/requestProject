@@ -4,43 +4,36 @@ module.exports = model;
 
 function model(sequelize) {
     const attributes = {
-        nameOfSponsor: { 
+        nameOfSponsor: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        description: {
+        numberOfGuest: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        eventDate: {
-            type: DataTypes.DATE,
+        descriptionOfEvent: {
+            type: DataTypes.STRING,
             allowNull: false
         },
-        eventStartTime: {
-            type: DataTypes.TIME,
+        eventTiming: {
+            type: DataTypes.JSON,
             allowNull: false
         },
-        eventEndTime: {
-            type: DataTypes.TIME,
-            allowNull: false
-        }, 
-        setUpTime: {
-            type: DataTypes.TIME,
+        foodBeverage: {
+            type: DataTypes.ENUM('yes', 'no'),
             allowNull: false
         },
-        takeDownTime:{
-            type: DataTypes.TIME,
+        facilityDetails: {
+            type: DataTypes.JSON,
             allowNull: false
         },
-        numberOFGuests: {
-            type: DataTypes.INTEGER,
-            allowNull: false
+        facilityDept: {
+            type: DataTypes.JSON
         },
-        foodOrBeverage: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false
-        },
-        doneAt: { type: DataTypes.DATE }
+        itDept:{
+            type: DataTypes.JSON
+        }
     }
     return sequelize.define('requests', attributes)
 }

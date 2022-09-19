@@ -1,6 +1,8 @@
 import React from 'react'
 import { Formik, Field, Form, ErrorMessage, getIn } from 'formik'
 import * as Yup from 'yup'
+import axios from 'axios'
+import logo from './lcslogo1.png'
 
 function App() {
   const initialValues = {
@@ -16,8 +18,8 @@ function App() {
     },
     foodBeverage: "",
     facilityDetails: [],
-     facilityDept: {
-       lectern: 0,
+    facilityDept: {
+      lectern: 0,
       chairs: 0,
       tables: 0,
       utensils: 0,
@@ -42,7 +44,7 @@ function App() {
       projector: 0,
       microphone: 0,
       extension: 0
-     }
+    }
   }
 
   const validateSchema = Yup.object().shape({
@@ -60,46 +62,62 @@ function App() {
     facilityDetails: Yup.array().of(Yup.string()).required('Please choose a facility'),
     facilityDept: Yup.object().shape({
       lectern: Yup.number(),
-        chairs: Yup.number(),
-        tables: Yup.number(),
-        utensils: Yup.number(),
-        coffeeUrns: Yup.number(),
-        bottledCups: Yup.number(),
-        paperPlate: Yup.number(),
-        tea: Yup.number(),
-        paperCups: Yup.number(),
-        tableCloth: Yup.number(),
-        piano: Yup.number(),
-        banners: Yup.number(),
-        lighting: Yup.number(),
-        hotWater: Yup.number(),
-        coffee:Yup.number()
-      }),
-      itDept: Yup.object().shape({
-        speakers: Yup.number(),
-        soundSystem: Yup.number(),
-        drone: Yup.number(),
-        screen: Yup.number(),
-        camera: Yup.number(),
-        projector: Yup.number(),
-        microphone: Yup.number(),
-        extension: Yup.number(),
+      chairs: Yup.number(),
+      tables: Yup.number(),
+      utensils: Yup.number(),
+      coffeeUrns: Yup.number(),
+      bottledCups: Yup.number(),
+      paperPlate: Yup.number(),
+      tea: Yup.number(),
+      paperCups: Yup.number(),
+      tableCloth: Yup.number(),
+      piano: Yup.number(),
+      banners: Yup.number(),
+      lighting: Yup.number(),
+      hotWater: Yup.number(),
+      coffee: Yup.number()
+    }),
+    itDept: Yup.object().shape({
+      speakers: Yup.number(),
+      soundSystem: Yup.number(),
+      drone: Yup.number(),
+      screen: Yup.number(),
+      camera: Yup.number(),
+      projector: Yup.number(),
+      microphone: Yup.number(),
+      extension: Yup.number(),
     })
 
   })
-  //console.log(initialValues)
-  function onSubmit(fields, { setStatus, setSubmitting }) {
+
+  async function onSubmit(fields, { setStatus, setSubmitting }) {
     setStatus()
-    console.log(fields)
+    var config = {
+      method: 'post',
+      url: 'http://localhost:4000/api/request',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: fields
+    };
+    try {
+      const { data } = await axios(config)
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
   }
-  //console.log(fields)
+
   return (
     <div className="App">
       <div className="container-fluid">
-        <section style={{ padding: "60px 0 " }} id="intro" className='bg-light mt-5'>
-          <div className='container-lg'>
-            <div className='text-center'>
-              <p className='display-4 text-center fw-bold' style={{ color: "grey" }}>Event Request Form </p>
+        <section id="intro" className=' mt-5'>
+          <div className='container'>
+            <div className='container' style={{ width: "600px" }}>
+              <img src={logo} alt='logo' className='img-thumbnail' />
+            </div>
+            <div className='text-center p-3'>
+              <p className='display-4 text-center texc-muted fw-bold' style={{ font: "poppins" }}>Event Request Form </p>
             </div>
           </div>
         </section>
@@ -115,7 +133,7 @@ function App() {
                       </button>
                     </h2>
                     <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                      <div className=" mt-2 row g-2">
+                      <div className=" mt-2 row g-3">
                         <div className="col-md">
                           <div className="form-floating">
                             <Field name="nameOfSponsor" type="text" className={"form-control" + (errors.nameOfSponsor && touched.nameOfSponsor ? ' is-invalid' : "")} id="floatingInputGrid" placeholder="Name of sponsor" />
@@ -131,7 +149,7 @@ function App() {
                           </div>
                         </div>
                       </div>
-                      <div className="form-floating mt-2">
+                      <div className="form-floating mt-2 g-3">
                         <Field name="descriptionOfEvent" className={"form-control" + (errors.descriptionOfEvent && touched.descriptionOfEvent ? ' is-invalid' : "")} placeholder="Leave a comment here" id="floatingTextarea2" style={{ height: "100px" }} />
                         <label htmlFor="floatingTextarea2">Description and Purpose of Event</label>
                         <ErrorMessage name="descriptionOfEvent" component='div' className="invalid-feeback" />
@@ -159,7 +177,7 @@ function App() {
                           </div>
                         </div>
                       </div>
-                      <div className='row'>
+                      <div className='row g-3'>
                         <div className='col-md'>
                           <div className="form-floating mt-2">
                             <Field name="eventTiming.setupTime" type="time" className={"form-control" + (getIn(errors, 'eventTiming.setupTime') && getIn(touched, 'eventTiming.setupTime') ? ' is-invalid' : "")} id="floatingInoutGrid" placeholder="Event time" />
@@ -300,8 +318,11 @@ function App() {
                                 Under the Arches
                               </label>
                             </div>
-                            <div className="form-check col-md" >
-                              <input type="text" className="form-control" id="floatingInoutGrid" placeholder="Please specify" />
+                            <div className="form-check col-md">
+                              <Field name="facilityDetails" className="form-check-input" type="checkbox" value="Multi Purpose Hall(Akyede)" id="flexCheckDefault" />
+                              <label className="form-check-label" htmlFor="flexCheckDefault">
+                                Multi Purpose Hall (Akyede)
+                              </label>
                             </div>
                           </div>
                         </div>
@@ -321,100 +342,109 @@ function App() {
                         <div className='container-lg mb-3 row'>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name="facilityDept.lectern" type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Lectern</span>
+                              <Field name="facilityDept.lectern" type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name="facilityDept.chairs" type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Chairs</span>
+                              <Field name="facilityDept.chairs" type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.tables' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Tables</span>
+                              <Field name='facilityDept.tables' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+
                             </div>
                           </div>
                         </div>
                         <div className='container-lg  mb-3 row'>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.utensils' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Utensils</span>
+                              <Field name='facilityDept.utensils' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.coffeeUrns' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Coffee Urns</span>
+                              <Field name='facilityDept.coffeeUrns' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.coffee' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Coffee</span>
+                              <Field name='facilityDept.coffee' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                             </div>
                           </div>
                         </div>
                         <div className='container-lg mb-3 row'>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.bottledCups' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Bottled Cups</span>
+                              <Field name='facilityDept.bottledCups' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.paperPlate' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Paper Plate</span>
+                              <Field name='facilityDept.paperPlate' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.tea' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Tea</span>
+                              <Field name='facilityDept.tea' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                             </div>
                           </div>
                         </div>
                         <div className='container-lg mb-3 row'>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.paperCups' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Paper Cups</span>
+                              <Field name='facilityDept.paperCups' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.tableCloth' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Table Cloth</span>
+                              <Field name='facilityDept.tableCloth' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.piano' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Piano</span>
+                              <Field name='facilityDept.piano' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+
                             </div>
                           </div>
                         </div>
                         <div className='container-lg mb-3 row'>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.banners' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Banners</span>
+                              <Field name='facilityDept.banners' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.lighting' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Lighting</span>
+                              <Field name='facilityDept.lighting' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
-                              <Field name='facilityDept.hotWater' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               <span className="input-group-text" id="basic-addon2">Hot Water</span>
+                              <Field name='facilityDept.hotWater' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+
                             </div>
                           </div>
                         </div>
@@ -435,58 +465,59 @@ function App() {
                           <div className='container-lg mb-3 row'>
                             <div className='col-md'>
                               <div className="input-group">
-                                <Field name='itDept.speakers' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Speakers</span>
+                                <Field name='itDept.speakers' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
+
                               </div>
                             </div>
                             <div className='col-md'>
                               <div className="input-group">
-                                <Field name='itDept.soundSystem' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Sound System</span>
+                                <Field name='itDept.soundSystem' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               </div>
                             </div>
                             <div className='col-md'>
                               <div className="input-group">
-                                <Field name='itDept.drone' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Drone</span>
+                                <Field name='itDept.drone' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               </div>
                             </div>
                           </div>
                           <div className='container-lg  mb-3 row'>
                             <div className='col-md'>
                               <div className="input-group">
-                                <Field name='itDept.screen' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Screen</span>
+                                <Field name='itDept.screen' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               </div>
                             </div>
                             <div className='col-md'>
                               <div className="input-group">
-                                <Field name='itDept.camera' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Camera</span>
+                                <Field name='itDept.camera' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               </div>
                             </div>
                             <div className='col-md'>
                               <div className="input-group">
-                                <Field name='itDept.projector' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Projector</span>
+                                <Field name='itDept.projector' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               </div>
                             </div>
                           </div>
                           <div className='container-lg mb-3 row'>
                             <div className='col-md'>
                               <div className="input-group">
-                                <Field name='itDept.microphone' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Microphone</span>
+                                <Field name='itDept.microphone' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               </div>
                             </div>
                             <div className='col-md'>
                               <div className="input-group">
-                                <Field name='itDept.extension' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">Extension</span>
+                                <Field name='itDept.extension' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
                               </div>
                             </div>
                           </div>
-                          <p className='lead fw-bold mt-2 text-muted'>
+                          <p className='lead mt-2 text-muted' style={{font:"poppiins"}}>
                             Contact IT Helpdesk for laptops and iPADS if needed
                           </p>
                         </div>
@@ -495,7 +526,7 @@ function App() {
                   </div>
                 </div>
                 <div className="container text-center">
-                  <button type="submit" disabled={isSubmitting} className="btn btn-lg p-3 m-5  btn-primary">
+                  <button type="submit" disabled={isSubmitting} className="btn btn-lg p-3 m-5 btn-primary">
                     {isSubmitting && <span className='spinner-border spinner-border-sm mr-1'></span>}
                     Submit</button>
                 </div>

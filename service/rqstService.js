@@ -1,33 +1,27 @@
 require('dotenv').config()
 const config = require('../config.json')
 const db = require('../helpers/db')
-//const axios = require('axios')
 
 module.exports = {
-    getFacilities,
-    getITEquipments,
-    // sign,
-    // initiate,
-    // pay,
-    // returnCall,
-    // statusCheck,
+    getRequests,
+    submit
 }
 
-async function getITEquipments(){
+async function submit(params){
     try {
-        const ITEquipments = await db.ITEquipment.findAll()
-        if(!ITEquipments) throw new Error
-        return ITEquipments
+        const request = new db.Request(params)
+        await request.save()
+        return request
     } catch (error) {
-        return error
+        console.log(error)
     }
 }
 
-async function getFacilities(){
+async function getRequests(){
     try {
-        const facilities  =  await db.Facility.findAll()
-        if(!facilities) throw new Error
-        return facilities
+        const requests  =  await db.Request.findAll()
+        if(!requests) throw new Error
+        return requests
     } catch (error) {
         return error 
     }
@@ -181,3 +175,4 @@ async function getFacilities(){
 //         console.log(error)
 //     }
 // }
+

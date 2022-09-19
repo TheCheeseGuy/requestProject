@@ -13,9 +13,7 @@ async function initialize() {
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`)
 
     const sequelize = new Sequelize(database, user, password, { dialect: 'mysql' })
-    db.Transaction = require('../models/requestModel')(sequelize)
-    db.Facility = require ('../models/facilityModel')(sequelize)
-    db.ITEquipment = require('../models/techModel')(sequelize)
+    db.Request = require('../models/requestModel')(sequelize)
 
     await sequelize.sync()
 }
