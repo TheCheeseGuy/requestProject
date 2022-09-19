@@ -517,8 +517,9 @@ function App() {
                               </div>
                             </div>
                           </div>
-                          <p className='lead mt-2 text-muted' style={{font:"poppiins"}}>
+                          <p className='lead mt-2 text-muted' style={{font:"poppiins"}}><i>
                             Contact IT Helpdesk for laptops and iPADS if needed
+                          </i>                            
                           </p>
                         </div>
                       </div>
