@@ -102,6 +102,9 @@ function App() {
     };
     try {
       const { data } = await axios(config)
+      // if(!data) return (
+      //   <div></div>
+      // )
       console.log(data)
     } catch (error) {
       console.log(error)
@@ -111,16 +114,16 @@ function App() {
   return (
     <div className="App">
       <div className="container-fluid">
-        <section id="intro" className=' mt-5'>
-          <div className='container'>
-            <div className='container' style={{ width: "600px" }}>
+        <div className="container" style = {{width: "600px 0" }} >
+          <div className='container mt-3 row justify-content-center align-items-center text-center'>
+            <div className='container col-md' style={{ width: "600px 0" }}>
               <img src={logo} alt='logo' className='img-thumbnail' />
             </div>
-            <div className='text-center p-3'>
+            <div className='text-center col-md p-3'>
               <p className='display-4 text-center texc-muted fw-bold' style={{ font: "poppins" }}>Event Request Form </p>
             </div>
           </div>
-        </section>
+        </div>
         <Formik initialValues={initialValues} validationSchema={validateSchema} onSubmit={onSubmit}>
           {({ errors, touched, isSubmitting }) => (
             <Form>
