@@ -33,6 +33,9 @@ function model(sequelize) {
         },
         itDept:{
             type: DataTypes.JSON
+        },
+        personResponsible:{
+            type: DataTypes.STRING
         }
     }
     return sequelize.define('requests', attributes)

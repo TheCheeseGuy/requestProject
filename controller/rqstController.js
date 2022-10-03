@@ -16,7 +16,8 @@ function requestSchema(req, res, next) {
         foodBeverage: Joi.string().required(),
         facilityDetails: Joi.array().required(),
         facilityDept: Joi.object().required(),
-        itDept: Joi.object().required()
+        itDept: Joi.object().required(),
+        personResponsible: Joi.string().required()
     })
     validateRequest(req, next, schema)
 }

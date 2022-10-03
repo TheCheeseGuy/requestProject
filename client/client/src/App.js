@@ -44,7 +44,8 @@ function App() {
       projector: 0,
       microphone: 0,
       extension: 0
-    }
+    },
+    personResponsible: ''
   }
 
   const validateSchema = Yup.object().shape({
@@ -86,8 +87,8 @@ function App() {
       projector: Yup.number(),
       microphone: Yup.number(),
       extension: Yup.number(),
-    })
-
+    }),
+    personResponsible: Yup.string().required('Please enter person responsible')
   })
 
   async function onSubmit(fields, { setStatus, setSubmitting }) {
@@ -102,9 +103,7 @@ function App() {
     };
     try {
       const { data } = await axios(config)
-      // if(!data) return (
-      //   <div></div>
-      // )
+      // put the return function that will return a jsx like a thank you page 
       console.log(data)
     } catch (error) {
       console.log(error)
@@ -114,21 +113,26 @@ function App() {
   return (
     <div className="App">
       <div className="container-fluid">
-        <div className="container" style = {{width: "600px 0" }} >
-          <div className='container mt-3 row justify-content-center align-items-center text-center'>
-            <div className='container col-md' style={{ width: "600px 0" }}>
-              <img src={logo} alt='logo' className='img-thumbnail' />
+        <div className="container" style={{ width: "600px 0", flexDirection: "row" }} >
+          <div className='container mt-3 row'>
+            <div className='container col-4'>
+              <img src={logo} alt='logo' className='img-thumbnail' style={{ width: 300 }} />
             </div>
-            <div className='text-center col-md p-3'>
-              <p className='display-4 text-center texc-muted fw-bold' style={{ font: "poppins" }}>Event Request Form </p>
+            <div className='col-8 d-flex flex-row-reverse'>
+              <div className='d-flex text-buttom flex-column'>
+                <div className='p-2'></div>
+                <div className='p-2'></div>
+                <div ><p className='display-5 fw-bold' style={{ font: "poppins" }}>Event Request Form </p></div>
+              </div>
+
             </div>
           </div>
         </div>
         <Formik initialValues={initialValues} validationSchema={validateSchema} onSubmit={onSubmit}>
           {({ errors, touched, isSubmitting }) => (
             <Form>
-              <div className='container mt-3' style={{ width: "600px 0" }}>
-                <div className="accordion p-3 border-0" id="accordionPanelsStayOpenExample">
+              <div className='container' style={{ width: "600px 0" }}>
+                <div className="accordion p-3 gap-3" id="accordionPanelsStayOpenExample">
                   <div className="accordion-item p-3">
                     <h2 className="accordion-header" id="panelsStayOpen-headingOne">
                       <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
@@ -152,28 +156,28 @@ function App() {
                           </div>
                         </div>
                       </div>
-                      <div className="form-floating mt-2 g-3">
+                      <div className="form-floating mt-3 g-3">
                         <Field name="descriptionOfEvent" className={"form-control" + (errors.descriptionOfEvent && touched.descriptionOfEvent ? ' is-invalid' : "")} placeholder="Leave a comment here" id="floatingTextarea2" style={{ height: "100px" }} />
                         <label htmlFor="floatingTextarea2">Description and Purpose of Event</label>
                         <ErrorMessage name="descriptionOfEvent" component='div' className="invalid-feeback" />
                       </div>
-                      <div className="row">
+                      <div className="row mt-3">
                         <div className="col-md">
-                          <div className="form-floating mt-2">
+                          <div className="form-floating mt-3">
                             <Field name="eventTiming.eventDate" type="date" className={"form-control" + (getIn(errors, 'eventTiming.eventDate') && getIn(touched, 'eventTiming.eventDate') ? ' is-invalid' : "")} id="floatingInoutGrid" placeholder="Event time" />
                             <label htmlFor="floadtingInputGrid"> Event Date</label>
                             <ErrorMessage name="eventTiming.eventDate" component='div' className="invalid-feedback" />
                           </div>
                         </div>
                         <div className="col-md">
-                          <div className="form-floating mt-2">
+                          <div className="form-floating mt-3">
                             <Field name="eventTiming.startsAt" type="time" className={"form-control" + (getIn(errors, 'eventTiming.startsAt') && getIn(touched, 'eventTiming.startsAt') ? ' is-invalid' : '')} id="floatingInoutGrid" placeholder="Event time" />
                             <label htmlFor="floadtingInputGrid"> Starts at</label>
                             <ErrorMessage name="eventTiming.startsAt" component='div' className="invalid-feeback" />
                           </div>
                         </div>
                         <div className='col-md'>
-                          <div className="form-floating mt-2">
+                          <div className="form-floating mt-3">
                             <Field name="eventTiming.endsAt" type="time" className={"form-control" + (getIn(errors, 'eventTiming.endsAt') && getIn(touched, 'eventTiming.endsAt') ? ' is-invalid' : "")} id="floatingInoutGrid" placeholder="Event time" />
                             <label htmlFor="floadtingInputGrid"> Ends at</label>
                             <ErrorMessage name="eventTiming.endsAt" component='div' className="invalid-feeback" />
@@ -182,33 +186,42 @@ function App() {
                       </div>
                       <div className='row g-3'>
                         <div className='col-md'>
-                          <div className="form-floating mt-2">
+                          <div className="form-floating mt-3">
                             <Field name="eventTiming.setupTime" type="time" className={"form-control" + (getIn(errors, 'eventTiming.setupTime') && getIn(touched, 'eventTiming.setupTime') ? ' is-invalid' : "")} id="floatingInoutGrid" placeholder="Event time" />
                             <label htmlFor="floadtingInputGrid"> SetUp Time</label>
                             <ErrorMessage name='eventTIming.setupTime' component='div' className='invalid-feedback' />
                           </div>
                         </div>
                         <div className='col-md'>
-                          <div className="form-floating mt-2">
+                          <div className="form-floating mt-3">
                             <Field name='eventTiming.takedownTime' type="time" className={"form-control" + (getIn(errors, 'eventTiming.takedownTime') && getIn(touched, 'eventTiming.takedownTime') ? ' is-invalid' : "")} id="floatingInoutGrid" placeholder="Event time" />
                             <label htmlFor="floadtingInputGrid"> Take Down Time</label>
                             <ErrorMessage name='eventTiming.takedownTime' component="div" className='invalid-feedback' />
                           </div>
                         </div>
                       </div>
-                      <div className='mt-2'>
-                        <span>Will food / beverages be served ?</span>
-                        <div className="form-check">
-                          <Field className="form-check-input" type="radio" name="foodBeverage" value="yes" id="flexRadioDefault1" />
-                          <label className="form-check-label" htmlFor="flexRadioDefault1">
-                            Yes
-                          </label>
+                      <div className='row mt-3'>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <Field name="personResponsible" type="text" className={"form-control" + (errors.personResponsible && touched.personResponsible ? ' is-invalid' : "")} id="floatingInputGrid" placeholder="Name of sponsor" />
+                            <label htmlFor="floatingInputGrid">Person Responsible</label>
+                            <ErrorMessage name="personResponsible" component='div' className="invalid-feeback" />
+                          </div>
                         </div>
-                        <div className="form-check">
-                          <Field className="form-check-input" type="radio" name="foodBeverage" value="no" id="flexRadioDefault2" />
-                          <label className="form-check-label" htmlFor="flexRadioDefault2">
-                            No
-                          </label>
+                        <div className='col-4'>
+                          <span>Will food / beverages be served ?</span>
+                          <div className="form-check">
+                            <Field className="form-check-input" type="radio" name="foodBeverage" value="yes" id="flexRadioDefault1" />
+                            <label className="form-check-label" htmlFor="flexRadioDefault1">
+                              Yes
+                            </label>
+                          </div>
+                          <div className="form-check">
+                            <Field className="form-check-input" type="radio" name="foodBeverage" value="no" id="flexRadioDefault2" />
+                            <label className="form-check-label" htmlFor="flexRadioDefault2">
+                              No
+                            </label>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -410,21 +423,18 @@ function App() {
                             <div className="input-group">
                               <span className="input-group-text" id="basic-addon2">Paper Cups</span>
                               <Field name='facilityDept.paperCups' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
-
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
                               <span className="input-group-text" id="basic-addon2">Table Cloth</span>
                               <Field name='facilityDept.tableCloth' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
-
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
                               <span className="input-group-text" id="basic-addon2">Piano</span>
                               <Field name='facilityDept.piano' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
-
                             </div>
                           </div>
                         </div>
@@ -433,21 +443,18 @@ function App() {
                             <div className="input-group">
                               <span className="input-group-text" id="basic-addon2">Banners</span>
                               <Field name='facilityDept.banners' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
-
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
                               <span className="input-group-text" id="basic-addon2">Lighting</span>
                               <Field name='facilityDept.lighting' type="tel" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
-
                             </div>
                           </div>
                           <div className='col-md'>
                             <div className="input-group">
                               <span className="input-group-text" id="basic-addon2">Hot Water</span>
                               <Field name='facilityDept.hotWater' type="number" className="form-control" placeholder="Enter quantity needed" aria-label="Enter quantity needed" aria-describedby="basic-addon2" />
-
                             </div>
                           </div>
                         </div>
@@ -520,9 +527,9 @@ function App() {
                               </div>
                             </div>
                           </div>
-                          <p className='lead mt-2 text-muted' style={{font:"poppiins"}}><i>
+                          <p className='lead mt-2 text-muted' style={{ font: "poppiins" }}><i>
                             Contact IT Helpdesk for laptops and iPADS if needed
-                          </i>                            
+                          </i>
                           </p>
                         </div>
                       </div>
